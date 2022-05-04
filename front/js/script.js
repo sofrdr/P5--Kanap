@@ -29,7 +29,17 @@ function getProducts() {
           productImage.setAttribute("src", product.imageUrl);
           productImage.setAttribute("alt", product.altTxt);
   
-          
+          // Ajout du nom pour chaque produit
+          let productName = document.createElement("h3");
+          productName.classList.add("productName");
+          article.appendChild(productName)
+            .textContent = product.name;
+  
+          // Ajout de la description du produit
+  
+          let productDescription = document.createElement("p");
+          article.appendChild(productDescription)
+            .textContent = product.description;
         }
   
   
