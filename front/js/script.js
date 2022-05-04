@@ -18,7 +18,18 @@ function getProducts() {
             .appendChild(productLink)
             .setAttribute("href", "./product.html?id=" + product._id);
   
-        
+          // Création de la balise <article>
+          let article = document.createElement("article");
+          productLink.appendChild(article);
+  
+          // Ajout de l'image des produits
+  
+          let productImage = document.createElement("img");
+          article.appendChild(productImage);
+          productImage.setAttribute("src", product.imageUrl);
+          productImage.setAttribute("alt", product.altTxt);
+  
+          
         }
   
   
