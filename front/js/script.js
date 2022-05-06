@@ -1,15 +1,14 @@
+
 function getProducts() {
     fetch("http://localhost:3000/api/products")
       .then(function (res) {
         if (res.ok) {
           return res.json();
-        } else {
-          console.error("error", code);
-        }
+        } 
   
       })
       .then(function (products) {
-        console.log(products);
+        console.log(products);      
         for (let product of products) {
   
           // Ajout d'un lien avec id pour chaque produit
@@ -38,11 +37,16 @@ function getProducts() {
           // Ajout de la description du produit
   
           let productDescription = document.createElement("p");
+          productDescription.classList.add("productDescription");
           article.appendChild(productDescription)
             .textContent = product.description;
         }
   
   
+      })
+
+      .catch(function(err){
+        console.log(err);
       })
   
   }
