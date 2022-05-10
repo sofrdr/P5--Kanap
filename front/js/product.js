@@ -1,7 +1,7 @@
 // on récupère l'id du produit dans l'URL
 let params = new URLSearchParams(window.location.search);
 let idProduct = params.get('id');
-console.log(idProduct);
+
 
 //Fonction pour ajouter des options de couleur
 function createColor(valueColor) {
@@ -19,7 +19,7 @@ fetch("http://localhost:3000/api/products")
         }
     })
     .then(function (products) {
-        console.log(products);
+        
         for (let product of products) {
             if (idProduct == product._id) {
                 //Ajout de l'image du produit
@@ -56,9 +56,12 @@ let cart = [];
 
 function addToCart() {
 
-    let quantityOfProduct = 1;
-    let quantity = document.querySelector("#quantity")
-    quantity.addEventListener("change", function (e) {
+    let quantityOfProduct = 0;
+
+    let quantity = document.querySelector("#quantity");
+    quantityOfProduct = quantity.value;
+    //Evenement pour observer le changement de valeur de l'input #quantity
+    quantity.addEventListener("change", function (e) { 
         quantityOfProduct = quantity.value;
         e.stopPropagation();
         console.log(quantityOfProduct)
@@ -67,39 +70,66 @@ function addToCart() {
 
     let colorOfProduct;
     let colors = document.querySelector("#colors");
+    //Evenement pour observer le changement de valeur du select #colors
     colors.addEventListener("change", function (e) {
         colorOfProduct = colors.value;
         e.stopPropagation();
         console.log(colorOfProduct);
     })
 
+
+    /*Fonction adjustQuantity() :
+     Si le produit est déjà présent dans le panier avec la même couleur,
+     on incrémente sa quantité*/
+
+    
+    function adjustQuantity() {
+        cart.forEach(shoppedProduct => {
+            if (shoppedProduct.id == idProduct && shoppedProduct.color == colorOfProduct) {
+                shoppedProduct.quantity += quantityOfProduct;
+                
+                
+            }
+        })
+    }
+
     let button = document.querySelector("#addToCart");
     button.addEventListener("click", function (e) {
-
-
-
+        //Si pas de couleur définie on empêche l'ajout du produit au panier
         if (!colorOfProduct) {
             e.preventDefault();
             alert("Veuillez choisir une couleur");
 
-
-        } else if (quantityOfProduct > 100) {
+        //Si la quantité est supérieure à 100 et inférieure à 1 alors on empêche l'ajout du produit au panier
+        } else if (quantityOfProduct > 100 || quantityOfProduct < 1) {
             e.preventDefault();
-            alert("Veuillez saisir une quantité inférieure à 100 articles");
+            alert("Veuillez saisir une valeur entre 1 et 100");
         } else {
-            let shoppedProductJSON = {
+
+
+            let shoppedProduct = {
                 id: idProduct,
                 quantity: quantityOfProduct,
                 color: colorOfProduct
+            };
 
-            }
-            let shoppedProduct = JSON.stringify(shoppedProductJSON);
-            localStorage.setItem("product", shoppedProduct);
+            adjustQuantity();
+            cart.push(shoppedProduct);
+            
+            localStorage.setItem("panier", JSON.stringify(cart));
             alert("Le produit a bien été ajouté au panier");
         }
+
+
+
+        
 
 
     })
 }
 
 addToCart();
+
+
+
+
