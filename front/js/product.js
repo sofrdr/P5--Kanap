@@ -64,7 +64,7 @@ quantityOfProduct = quantity.value;
 quantity.addEventListener("change", function (e) {
     quantityOfProduct = quantity.value;
     e.stopPropagation();
-    console.log(quantityOfProduct)
+    //console.log(quantityOfProduct)
 })
 
 
@@ -87,14 +87,17 @@ function addtoBasket() {
 /*Si on trouve l'id ET la couleur du produit dans le panier
 alors on augmente la quantité
 sinon on ajoute le produit */
-    let foundProduct = basket.find((p) => p.id == idProduct && p.color == colorOfProduct);
+    let foundProduct = basket.find(function (p) {
+            return p.id == idProduct && p.color == colorOfProduct;
+        });
     
+        
     if (foundProduct) {
-        foundProduct.quantity += quantityOfProduct;
+        let total = Number(foundProduct.quantity) + Number(quantityOfProduct);
+        foundProduct.quantity = total;
     } else {
         basket.push(shoppedProduct)
     }
-
     localStorage.setItem("panier", JSON.stringify(basket));
     alert("Le produit a bien été ajouté au panier");
 }
