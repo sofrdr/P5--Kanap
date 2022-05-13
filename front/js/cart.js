@@ -65,7 +65,7 @@ for(let item of myBasket){
 
 
 const dataID = document.querySelector("article").getAttribute("data-id");
-console.log(dataID)
+console.log(dataID) 
 
 async function getProducts(){
     const response = await fetch("http://localhost:3000/api/products");
@@ -73,14 +73,29 @@ async function getProducts(){
     console.log(products)
 
     for(let product of products){
-        if(product.id == dataID){
-            let
+        //Si l'id d'un produit de l'API correspond à l'id du produit du panier
+        if(product._id == dataID){
+            //On affiche l'image du produit du panier
+            let img = document.querySelector(".cart__item__img img");
+            img.setAttribute("src", product.imageUrl);
+            img.setAttribute("alt", product.altTxt);
+            // On affiche le nom du produit
+            document.querySelector(".cart__item__content__description h2").textContent = product.name;
+            // On affiche le prix du produit à l'unité
+            document.querySelector(".cart__item__content__description p:last-child").textContent = product.price;
         }
     }
 }
  getProducts()
 
 
+ let allQuantityInputs = document.querySelectorAll(".itemQuantity");
+ let numberOfInputs = allQuantityInputs.length;
+ console.log(allQuantityInputs)
+ 
+ let totalQuantity = 0;
+
+ 
 
 
                 
