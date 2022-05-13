@@ -48,6 +48,9 @@ fetch("http://localhost:3000/api/products")
             }
         }
     })
+    .catch(error =>{
+        console.error(error);
+    })
 
 /*Ajouter le produit au panier*/
 
@@ -98,7 +101,7 @@ sinon on ajoute le produit */
     } else {
         basket.push(shoppedProduct)
     }
-    localStorage.setItem("panier", JSON.stringify(basket));
+    localStorage.setItem("basket", JSON.stringify(basket));
     alert("Le produit a bien été ajouté au panier");
 }
 
