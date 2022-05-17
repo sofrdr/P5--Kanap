@@ -11,6 +11,10 @@ function getBasket(basket){
 const myBasket = getBasket();
 console.log(myBasket)
 
+if(!myBasket){
+    alert("Votre panier est vide");
+}else{
+
 for(let item of myBasket){
     //Ajout d'une balise article pour chaque élement du panier
     let article = document.createElement("article");
@@ -50,7 +54,7 @@ for(let item of myBasket){
     divSettings.appendChild(divQuantity);
 
     let quantityParagraph = document.createElement("p");
-    divQuantity.appendChild(quantityParagraph);
+    divQuantity.appendChild(quantityParagraph).textContent = "Qté : ";
     let quantityInput = document.createElement("input");
     divQuantity.appendChild(quantityInput);
     quantityInput.setAttribute("type", "number");
@@ -61,6 +65,7 @@ for(let item of myBasket){
     quantityInput.classList.add("itemQuantity");
 
     
+}
 }
 
 
@@ -82,7 +87,7 @@ async function getProducts(){
             // On affiche le nom du produit
             document.querySelector(".cart__item__content__description h2").textContent = product.name;
             // On affiche le prix du produit à l'unité
-            document.querySelector(".cart__item__content__description p:last-child").textContent = product.price;
+            document.querySelector(".cart__item__content__description p:last-child").textContent = product.price + "€";
         }
     }
 }
