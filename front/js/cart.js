@@ -96,11 +96,21 @@ async function getProducts(){
 
  let allQuantityInputs = document.querySelectorAll(".itemQuantity");
  let numberOfInputs = allQuantityInputs.length;
- console.log(allQuantityInputs)
- 
- let totalQuantity = 0;
 
  
+ let totalQuantity = [];
+ let sum = 0;
 
+function getTotalproducts(){
+    for(let item of myBasket){
+        totalQuantity.push(Number(item.quantity));       
+    }
+    for(let i=0; i < totalQuantity.length; i++){
+        sum += totalQuantity[i];
+    }
+    return sum;
+} 
 
+const totalProducts = getTotalproducts();
+console.log(totalProducts);
                 

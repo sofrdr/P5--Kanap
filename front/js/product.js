@@ -124,9 +124,8 @@ function controlInputs() {
     })
 }
 
+
 controlInputs();
-
-
 
 
 
