@@ -146,6 +146,10 @@ async function getTotalPrice() {
     }
     console.log(totalPrice);
     document.querySelector("#totalPrice").textContent = totalPrice;
+
+    
 }
 
 getTotalPrice();
+
+
