@@ -70,7 +70,7 @@ if (!myBasket) {
 
 
 const dataID = document.querySelector("article").getAttribute("data-id");
-console.log(dataID)
+
 
 
 async function getProducts() {
@@ -127,7 +127,7 @@ let price = [];
 async function getTotalPrice() {
     const response = await fetch("http://localhost:3000/api/products");
     const products = await response.json();
-    for (let item of myBasket) {        
+    for (let item of myBasket) {
         for (let product of products) {
             if (product._id == dataID) {
                 price.push(product.price);
@@ -141,13 +141,13 @@ async function getTotalPrice() {
     }
     console.log(quantity)
 
-    for(let i = 0; i < quantity.length; i++){
+    for (let i = 0; i < quantity.length; i++) {
         totalPrice += (price[i] * quantity[i]);
     }
     console.log(totalPrice);
     document.querySelector("#totalPrice").textContent = totalPrice;
 
-    
+
 }
 
 getTotalPrice();
@@ -155,20 +155,27 @@ getTotalPrice();
 
 /* Supprimer un article du panier */
 
-let pDelete = document.createElement("p")
-pDelete.textContent = "Supprimer";
-pDelete.classList.add("deleteItem");
 
-let divDelete = document.createElement("div");
-divDelete.classList.add("cart__item__content__settings__delete");
-divDelete.appendChild(pDelete);
 
-document.querySelector("div .cart__item__content__settings").appendChild(divDelete);
 
-function removeFromBasket(elt){
+const divSettings = document.querySelectorAll(".cart__item__content__settings");
+
+for (let i = 0; i < divSettings.length; i++) {
+    let pDelete = document.createElement("p");
+    pDelete.textContent = "Supprimer";
+    pDelete.classList.add("deleteItem");
+
+    let divDelete = document.createElement("div");
+    divDelete.classList.add("cart__item__content__settings__delete");
+    divDelete.appendChild(pDelete);
+    divSettings[i].appendChild(divDelete)
+
+}
+
+function removeFromBasket(elt) {
     localStorage.removeItem(elt);
 }
 
-pDelete.addEventListener("click", function(e){
-   
+pDelete.addEventListener("click", function (e) {
+
 })
