@@ -153,3 +153,22 @@ async function getTotalPrice() {
 getTotalPrice();
 
 
+/* Supprimer un article du panier */
+
+let pDelete = document.createElement("p")
+pDelete.textContent = "Supprimer";
+pDelete.classList.add("deleteItem");
+
+let divDelete = document.createElement("div");
+divDelete.classList.add("cart__item__content__settings__delete");
+divDelete.appendChild(pDelete);
+
+document.querySelector("div .cart__item__content__settings").appendChild(divDelete);
+
+function removeFromBasket(elt){
+    localStorage.removeItem(elt);
+}
+
+pDelete.addEventListener("click", function(e){
+   
+})
