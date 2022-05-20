@@ -133,7 +133,28 @@ async function getProductsAttributes() {
         divSettings.appendChild(divDelete)
 
 
-        
+        /* Ajout d'un évènement pour écouter le changement de valeur de l'input quantité, 
+        on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
+        quantityInput.addEventListener("change", function () {
+            let newQuantity = Number(quantityInput.value);
+            console.log("nouvelle qté : " + newQuantity)
+            if (newQuantity > 1 && newQuantity < 100) {
+                item.quantity = newQuantity;
+            }
+            console.log(item)
+            let newBasket = [];
+            for(let item of myBasket){
+                let shoppedProduct = {
+                    key: item.key, 
+                    id: item.id,
+                    quantity: item.quantity, 
+                    color: item.color
+                }
+                newBasket.push(shoppedProduct);
+            }
+            localStorage.setItem("basket", JSON.stringify(newBasket))
+            
+        })
 
     }
 
