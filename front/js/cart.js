@@ -8,8 +8,19 @@ function getBasket(basket) {
 }
 
 // On stocke le résultat de la fonction dans la variable myBasket
-const myBasket = getBasket();
+let myBasket = getBasket();
 console.log(myBasket)
+
+/*Fonction sauvegarder le panier */
+function saveBasket(myBasket) {
+    for (let item of myBasket) {
+        delete item.price;
+        delete item.img;
+        delete item.alt;
+    }
+    localStorage.setItem("basket", JSON.stringify(myBasket))
+}
+
 
 /*Fonction pour ajouter au DOM un élément img qui contiendra l'image de chaque produit du panier.
 On ajoute 3 paramètres : 
@@ -82,6 +93,7 @@ async function getProductsAttributes() {
 
             }
         }
+
         //console.log(item)
         let article = document.createElement("article");
         article.setAttribute("data-id", item.id);
@@ -124,13 +136,15 @@ async function getProductsAttributes() {
 
 
         // Création du bouton supprimer pour chaque article
-        let pDelete = document.createElement("p");
-        pDelete.textContent = "Supprimer";
-        pDelete.classList.add("deleteItem");
+        let buttonDelete = document.createElement("p");
+        buttonDelete.textContent = "Supprimer";
+        buttonDelete.classList.add("deleteItem");
         let divDelete = document.createElement("div");
         divDelete.classList.add("cart__item__content__settings__delete");
-        divDelete.appendChild(pDelete);
-        divSettings.appendChild(divDelete)
+        divDelete.appendChild(buttonDelete);
+        divSettings.appendChild(divDelete);
+
+
 
 
         /* Ajout d'un évènement pour écouter le changement de valeur de l'input quantité, 
@@ -138,26 +152,59 @@ async function getProductsAttributes() {
         quantityInput.addEventListener("change", function () {
             let newQuantity = Number(quantityInput.value);
             console.log("nouvelle qté : " + newQuantity)
-            if (newQuantity > 1 && newQuantity < 100) {
+            if (newQuantity >= 1 && newQuantity <= 100) {
                 item.quantity = newQuantity;
-            }
-            console.log(item)
+            } 
+
             let newBasket = [];
-            for(let item of myBasket){
+            for (let item of myBasket) {
                 let shoppedProduct = {
-                    key: item.key, 
+                    key: item.key,
                     id: item.id,
-                    quantity: item.quantity, 
+                    quantity: item.quantity,
                     color: item.color
                 }
                 newBasket.push(shoppedProduct);
             }
-            localStorage.setItem("basket", JSON.stringify(newBasket))
-            
+            saveBasket(newBasket);
+
+
+
         })
+
+        /* Ajout d'un évènement pour supprimer un article*/
+
+        buttonDelete.addEventListener("click", function () {
+
+            const closest = buttonDelete.closest("article");
+            let closestID = closest.getAttribute("data-id");
+            console.log(closestID)
+            document.getElementById("cart__items").removeChild(closest);
+            alert("Produit supprimé du panier");
+            let index = myBasket.findIndex(element => {
+                if (element.id == closestID) {
+                    return true;
+                }
+            })
+            console.log("closest id : " + index)
+            myBasket.splice(index, 1)
+            saveBasket(myBasket);
+            if (!myBasket.length) {
+                removeBasket();
+                alert("Votre panier est vide");
+            }
+            console.log(myBasket)
+            
+
+
+            
+
+
+        });
 
     }
 
+    console.log(myBasket)
 }
 
 /* Création d'une fonction getTotalProducts() pour obtenir le nombre total de produits
@@ -212,7 +259,7 @@ async function getTotalPrice() {
 if (!myBasket) {
     alert("Votre panier est vide");
 } else {
-    getProductsAttributes()
+    getProductsAttributes();
     getTotalPrice();
     getTotalproducts();
 }
@@ -222,7 +269,9 @@ if (!myBasket) {
 /* Supprimer un article du panier */
 
 
-function removeFromBasket(elt) {
-    localStorage.removeItem(elt);
+function removeBasket() {
+
+
+    localStorage.removeItem("basket");
 }
 
