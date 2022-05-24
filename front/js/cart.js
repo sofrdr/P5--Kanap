@@ -290,7 +290,7 @@ if (!myBasket) {
     
 }
 
-// TODO : Ajouter un évènement pour actualiser le prix et la quantité
+// TODO : Ajouter un évènement pour actualiser le prix 
 
 
 let regexString = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
@@ -298,22 +298,16 @@ let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
 let regexAddress = /(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})\s/
 
 
-let submitButton = document.getElementById("order");
-let firstName = document.getElementById("firstName").value;
-let lastName = document.getElementById("lastName").value;
-let address = document.getElementById("address").value;
-let email = document.getElementById("email").value;
-let city = document.getElementById("city").value;
-
-
-
-
+/*Fonction pour vérifier la validité de la valeur de l'input avec 2 paramètres :
+- inputValue : le contenu qu'on veut tester
+- regex : la regex à appliquer */
 function isValid(inputValue, regex) {
     if (regex.test(inputValue)) {
         return true;
     }
 }
 
+/*Fonction pour vérifier la validité de tous les inputs */ 
 function allValid() {
     if (isValid(firstName, regexString) && isValid(lastName, regexString) && isValid(address, regexAddress) && isValid(email, regexMail) && isValid(city, regexString)) {
         return true;
@@ -321,16 +315,55 @@ function allValid() {
 }
 
 
+/*Fonction pour afficher un message d'erreur sur la page si la valeur de l'input n'est pas valide.
+Fonction avec 4 paramètres :
+- input : le champ où on ajoute un évènement
+- id : l'id du champ où on affiche le message d'erreur
+- msg : le message d'erreur à afficher
+- regex : la regex à utiliser pour contrôler la validité */
+function showErrorMsg(input, id, msg, regex){
+    
+    input.addEventListener("keyup", function(e){
+        let inputValue = e.target.value;
+        if(!isValid(inputValue, regex)){
+            document.getElementById(id).textContent = "Veuillez saisir " + msg + " valide";
+        }else{
+            document.getElementById(id).textContent = "";
+        }
+    })
+}
+
+
+let firstNameInput = document.getElementById("firstName"); 
+let lastNameInput = document.getElementById("lastName");
+let addressInput = document.getElementById("address");
+let emailInput = document.getElementById("email");
+let cityInput = document.getElementById("city");
+
+
+showErrorMsg(lastNameInput, "lastNameErrorMsg", "un nom", regexString);
+showErrorMsg(firstNameInput, "firstNameErrorMsg", "un prénom", regexString);
+showErrorMsg(addressInput, "addressErrorMsg", "une addresse", regexAddress);
+showErrorMsg(emailInput, "emailErrorMsg", "un email", regexMail);
+showErrorMsg(cityInput, "cityErrorMsg", "un nom de ville", regexString);
+
+
+
+let submitButton = document.getElementById("order");
+
 let totalQuantity = document.querySelector("#totalQuantity").textContent;
 
 submitButton.addEventListener("click", function (e) {
     /* Si tous les inputs sont valides ET que la quantité est inférieure à 100 article
     ALORS on envoie le formulaire
     SINON on bloque l'envoi du formulaire et on affiche un message d'erreur*/
+     
+    
     if (allValid() && (totalQuantity <= 100 && totalQuantity >= 1)) {
-
+        
     } else {
         e.preventDefault();
+        
     }
 })
 
