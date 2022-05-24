@@ -11,7 +11,7 @@ function getBasket(basket) {
 let myBasket = getBasket();
 console.log(myBasket)
 
-/*Fonction sauvegarder le panier */
+/*Fonction pour sauvegarder le panier */
 function saveBasket(myBasket) {
     for (let item of myBasket) {
         delete item.price;
@@ -19,6 +19,12 @@ function saveBasket(myBasket) {
         delete item.alt;
     }
     localStorage.setItem("basket", JSON.stringify(myBasket))
+}
+
+/* Fonction pour supprimer le panier du local storage */
+
+function removeBasket() {
+    localStorage.removeItem("basket");
 }
 
 
@@ -151,10 +157,10 @@ async function getProductsAttributes() {
         on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
         quantityInput.addEventListener("change", function () {
             let newQuantity = Number(quantityInput.value);
-            console.log("nouvelle qté : " + newQuantity)
+            // console.log("nouvelle qté : " + newQuantity)
             if (newQuantity >= 1 && newQuantity <= 100) {
                 item.quantity = newQuantity;
-            } 
+            }
 
             let newBasket = [];
             for (let item of myBasket) {
@@ -168,44 +174,44 @@ async function getProductsAttributes() {
             }
             saveBasket(newBasket);
 
-
-
         })
 
         /* Ajout d'un évènement pour supprimer un article*/
 
         buttonDelete.addEventListener("click", function () {
 
-            const closest = buttonDelete.closest("article");
-            let closestID = closest.getAttribute("data-id");
-            console.log(closestID)
-            document.getElementById("cart__items").removeChild(closest);
+            const closestItem = buttonDelete.closest("article");
+            const closestID = closestItem.getAttribute("data-id");            
+            // console.log(closestID)
+
+            // On supprime l'article du DOM
+            document.getElementById("cart__items").removeChild(closestItem);
             alert("Produit supprimé du panier");
+
+            // On supprime l'article du panier + MAJ du local storage
             let index = myBasket.findIndex(element => {
                 if (element.id == closestID) {
                     return true;
                 }
             })
-            console.log("closest id : " + index)
+            // console.log("closest id : " + index)
             myBasket.splice(index, 1)
             saveBasket(myBasket);
+
+            // Si le panier est vide alors on le supprime du local storage
             if (!myBasket.length) {
                 removeBasket();
                 alert("Votre panier est vide");
             }
-            console.log(myBasket)
             
-
-
-            
-
-
         });
 
     }
 
-    console.log(myBasket)
+    //console.log(myBasket)
 }
+
+
 
 /* Création d'une fonction getTotalProducts() pour obtenir le nombre total de produits
 ajoutés au panier */
@@ -213,6 +219,7 @@ ajoutés au panier */
 function getTotalproducts() {
     let totalQuantity = [];
     let sum = 0;
+
     //Pour chaque produit du panier, on récupère sa quantité et on l'ajoute dans un array
     for (let item of myBasket) {
         totalQuantity.push(Number(item.quantity));
@@ -222,7 +229,12 @@ function getTotalproducts() {
         sum += totalQuantity[i];
     }
 
-    document.querySelector("#totalQuantity").textContent = sum;
+    if (!myBasket) {
+        document.querySelector("#totalQuantity").textContent = "0";
+    } else {
+        document.querySelector("#totalQuantity").textContent = sum;
+    }
+
 }
 
 
@@ -252,26 +264,28 @@ async function getTotalPrice() {
         totalPrice += (price[i] * quantity[i]);
     }
 
-    document.querySelector("#totalPrice").textContent = totalPrice;
-
+    if(!myBasket){
+        document.querySelector("#totalPrice").textContent = "0";
+    }else {
+       document.querySelector("#totalPrice").textContent = totalPrice; 
+    }
 
 }
+
+
+//Appel des fonctions si le panier n'est pas vide
+
 if (!myBasket) {
     alert("Votre panier est vide");
 } else {
-    getProductsAttributes();
-    getTotalPrice();
+    getProductsAttributes().catch(err => console.error(err));
+    getTotalPrice().catch(err => console.error(err));;
     getTotalproducts();
 }
 
+// TODO : Ajouter un évènement pour actualiser le prix et la quantité
 
 
-/* Supprimer un article du panier */
-
-
-function removeBasket() {
-
-
-    localStorage.removeItem("basket");
-}
+let regexName = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
+let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
 
