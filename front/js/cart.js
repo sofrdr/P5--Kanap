@@ -11,7 +11,7 @@ function getBasket(basket) {
 let myBasket = getBasket();
 console.log(myBasket)
 
-/*Fonction pour sauvegarder le panier */
+/* Fonction pour sauvegarder le panier */
 function saveBasket(myBasket) {
     for (let item of myBasket) {
         delete item.price;
@@ -181,7 +181,7 @@ async function getProductsAttributes() {
         buttonDelete.addEventListener("click", function () {
 
             const closestItem = buttonDelete.closest("article");
-            const closestID = closestItem.getAttribute("data-id");            
+            const closestID = closestItem.getAttribute("data-id");
             // console.log(closestID)
 
             // On supprime l'article du DOM
@@ -203,7 +203,7 @@ async function getProductsAttributes() {
                 removeBasket();
                 alert("Votre panier est vide");
             }
-            
+
         });
 
     }
@@ -239,6 +239,7 @@ function getTotalproducts() {
 
 
 
+
 /* Création d'une fonction getTotalPrice() pour calculer le prix total du panier */
 
 let totalPrice = 0;
@@ -264,10 +265,10 @@ async function getTotalPrice() {
         totalPrice += (price[i] * quantity[i]);
     }
 
-    if(!myBasket){
+    if (!myBasket) {
         document.querySelector("#totalPrice").textContent = "0";
-    }else {
-       document.querySelector("#totalPrice").textContent = totalPrice; 
+    } else {
+        document.querySelector("#totalPrice").textContent = totalPrice;
     }
 
 }
@@ -281,11 +282,55 @@ if (!myBasket) {
     getProductsAttributes().catch(err => console.error(err));
     getTotalPrice().catch(err => console.error(err));;
     getTotalproducts();
+    document.addEventListener("change", function(){
+        getTotalproducts();
+        
+        
+    })
+    
 }
 
 // TODO : Ajouter un évènement pour actualiser le prix et la quantité
 
 
-let regexName = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
+let regexString = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
 let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
+let regexAddress = /(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})\s/
+
+
+let submitButton = document.getElementById("order");
+let firstName = document.getElementById("firstName").value;
+let lastName = document.getElementById("lastName").value;
+let address = document.getElementById("address").value;
+let email = document.getElementById("email").value;
+let city = document.getElementById("city").value;
+
+
+
+
+function isValid(inputValue, regex) {
+    if (regex.test(inputValue)) {
+        return true;
+    }
+}
+
+function allValid() {
+    if (isValid(firstName, regexString) && isValid(lastName, regexString) && isValid(address, regexAddress) && isValid(email, regexMail) && isValid(city, regexString)) {
+        return true;
+    }
+}
+
+
+let totalQuantity = document.querySelector("#totalQuantity").textContent;
+
+submitButton.addEventListener("click", function (e) {
+    /* Si tous les inputs sont valides ET que la quantité est inférieure à 100 article
+    ALORS on envoie le formulaire
+    SINON on bloque l'envoi du formulaire et on affiche un message d'erreur*/
+    if (allValid() && (totalQuantity <= 100 && totalQuantity >= 1)) {
+
+    } else {
+        e.preventDefault();
+    }
+})
 
