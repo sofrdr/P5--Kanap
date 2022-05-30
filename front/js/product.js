@@ -69,17 +69,17 @@ button.addEventListener("click", (e) => {
 });
 
 function controlInputs(quantitySelected, colorSelected, shoppedProduct) {
-    //Si pas de couleur définie on empêche l'ajout du produit au panier
-    if (colorSelected ==="") {
-      alert("Veuillez choisir une couleur");
-      return false;
-    } else if (quantitySelected > 100 || quantitySelected < 1) {
-      alert("Veuillez saisir une valeur entre 1 et 100");
-      return false;
-    } else {
-      addtoBasket(shoppedProduct);
-    }
+  //Si pas de couleur définie on empêche l'ajout du produit au panier
+  if (colorSelected === "") {
+    alert("Veuillez choisir une couleur");
+    return false;
+  } else if (quantitySelected > 100 || quantitySelected < 1) {
+    alert("Veuillez saisir une valeur entre 1 et 100");
+    return false;
+  } else {
+    addtoBasket(shoppedProduct);
   }
+}
 
 
 // Function ajouter au panier
@@ -92,31 +92,31 @@ function addtoBasket(shoppedProduct) {
     let newBasket = [shoppedProduct];
     localStorage.setItem("basket", JSON.stringify(newBasket));
     alert("Produit ajouté au panier 0");
-  }
-  else { 
-      for (const product of basket) {
-        if (product.key === shoppedProduct.key) {
-            let newQuantity =  product.quantity + shoppedProduct.quantity;
-            if (newQuantity <= 100 && newQuantity >= 1) {
-                product.quantity = newQuantity;
-                localStorage.setItem("basket", JSON.stringify(basket));
-                alert("Produit ajouté au panier 1");
-                return true;
-            }
-                else {
-                    alert("Veuillez choisir entre 1 produit et 100");
-                }
-            }
-            else {
-                basket.push(shoppedProduct);
-                localStorage.setItem("basket", JSON.stringify(basket));
-                console.log(basket)
-                alert("Produit ajouté au panier 2");
-                break;
-            }
+  } else {
+    let isDouble = false;
+
+    for (const product of basket) {
+      if (product.key === shoppedProduct.key) {
+        const newQuantity = product.quantity + shoppedProduct.quantity;
+        if (newQuantity <= 100 && newQuantity >= 1) {
+          product.quantity = newQuantity;
+          localStorage.setItem("basket", JSON.stringify(basket));
+          alert("Produit ajouté au panier 1");
+          return true;
+        } else {
+          alert("Quantité maximale atteinte");
+          return true;
         }
       }
+    }
+    if (isDouble === false) {
+      basket.push(shoppedProduct);
+      localStorage.setItem("basket", JSON.stringify(basket));
+      console.log(basket);
+      alert("Produit ajouté au panier 2");
+    }
   }
+}
 
 
 

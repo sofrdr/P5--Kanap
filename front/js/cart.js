@@ -174,6 +174,7 @@ async function getProductsAttributes() {
             }
             saveBasket(newBasket);
 
+
         })
 
         /* Ajout d'un évènement pour supprimer un article*/
@@ -229,13 +230,12 @@ function getTotalproducts() {
         sum += totalQuantity[i];
     }
 
-    if (!myBasket) {
-        document.querySelector("#totalQuantity").textContent = "0";
-    } else {
-        document.querySelector("#totalQuantity").textContent = sum;
-    }
+    //document.querySelector("#totalQuantity").textContent = sum;
+    return sum;
 
 }
+
+
 
 
 
@@ -265,8 +265,9 @@ async function getTotalPrice() {
         totalPrice += (price[i] * quantity[i]);
     }
 
+    let x = 0;
     if (!myBasket) {
-        document.querySelector("#totalPrice").textContent = "0";
+        document.querySelector("#totalPrice").textContent = x;
     } else {
         document.querySelector("#totalPrice").textContent = totalPrice;
     }
@@ -281,9 +282,9 @@ if (!myBasket) {
 } else {
     getProductsAttributes().catch(err => console.error(err));
     getTotalPrice().catch(err => console.error(err));;
-    getTotalproducts();
+    document.querySelector("#totalQuantity").textContent = getTotalproducts();
     document.addEventListener("change", function () {
-        getTotalproducts();
+        document.querySelector("#totalQuantity").textContent = getTotalproducts();
 
 
     })
@@ -311,11 +312,11 @@ function isValid(inputValue, regex) {
 
 /*Fonction pour vérifier la validité de tous les inputs */
 function isFormValid() {
-    if (isValid(firstName, regexString) &&
-        isValid(lastName, regexString) &&
-        isValid(address, regexAddress) &&
-        isValid(email, regexMail) &&
-        isValid(city, regexString)) {
+    if (isValid(firstNameInput.value, regexString) &&
+        isValid(lastNameInput.value, regexString) &&
+        isValid(addressInput.value, regexAddress) &&
+        isValid(emailInput.value, regexMail) &&
+        isValid(cityInput.value, regexString)) {
         return true;
     }
 
@@ -349,6 +350,8 @@ let emailInput = document.getElementById("email");
 let cityInput = document.getElementById("city");
 
 
+
+
 showErrorMsg(lastNameInput, "lastNameErrorMsg", "un nom", regexString);
 showErrorMsg(firstNameInput, "firstNameErrorMsg", "un prénom", regexString);
 showErrorMsg(addressInput, "addressErrorMsg", "une adresse", regexAddress);
@@ -359,20 +362,48 @@ showErrorMsg(cityInput, "cityErrorMsg", "un nom de ville", regexString);
 
 let submitButton = document.getElementById("order");
 
-let totalQuantity = document.querySelector("#totalQuantity").textContent;
-
 submitButton.addEventListener("click", function (e) {
     /* Si tous les inputs sont valides ET que la quantité est inférieure à 100 article
     ALORS on envoie le formulaire
     SINON on bloque l'envoi du formulaire et on affiche un message d'erreur*/
 
-
-    if (isFormValid() && (totalQuantity <= 100 && totalQuantity >= 1)) {
-
-    } else {
-
+    let totalQuantity = getTotalproducts();
+    if (!isFormValid()) {
         e.preventDefault();
         alert("Veuillez vérifier les informations du formulaire");
+    } else if (totalQuantity > 100 || totalQuantity < 1) {
+        e.preventDefault();
+        alert("Quantité maximale atteinte (100 produits max)")
+    } else {
+
+        const contact = {
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            address: addressInput.value,
+            city: cityInput.value,
+            email: emailInput.value
+        }
+
+        let products = [];
+        for (let item of myBasket) {
+            products.push(item.id);
+        }
+
+        const orderInfo = {contact, products  }
+        //console.log(products);
+
+        //console.log(contact);
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(orderInfo),
+            headers: {'Content-Type': 'application/json'}                            
+        };
+
+        fetch("http://localhost:3000/api/products/order", options)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.error(err))
+
     }
 })
 
