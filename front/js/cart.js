@@ -164,13 +164,13 @@ async function getProductsAttributes() {
 
             let newBasket = [];
             for (let item of myBasket) {
-                let shoppedProduct = {
+                let newProduct = {
                     key: item.key,
                     id: item.id,
                     quantity: item.quantity,
                     color: item.color
                 }
-                newBasket.push(shoppedProduct);
+                newBasket.push(newProduct);
             }
             saveBasket(newBasket);
 
@@ -236,9 +236,6 @@ function getTotalProducts() {
 
 
 
-
-
-
 /* Création d'une fonction getTotalPrice() pour calculer le prix total du panier */
 
 
@@ -289,12 +286,12 @@ if (!myBasket) {
 
 }
 
-// TODO : Ajouter un évènement pour actualiser le prix 
 
 
-// VALIDATION DU FORMULAIRE 
 
-let regexString = /^(?=.\D{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
+/* -------------------- VALIDATION DU FORMULAIRE ------------------------ */
+
+let regexString = /^(?=.\D{0,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-\s][\u00c0-\u01ffa-zA-Z]+)*$/
 let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
 let regexAddress = /^(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})$/
 
@@ -320,7 +317,6 @@ function isFormValid() {
 
 
 }
-
 
 /*Fonction pour afficher un message d'erreur sur la page si la valeur de l'input n'est pas valide.
 Fonction avec 4 paramètres :
@@ -348,8 +344,6 @@ let emailInput = document.getElementById("email");
 let cityInput = document.getElementById("city");
 
 
-
-
 showErrorMsg(lastNameInput, "lastNameErrorMsg", "un nom", regexString);
 showErrorMsg(firstNameInput, "firstNameErrorMsg", "un prénom", regexString);
 showErrorMsg(addressInput, "addressErrorMsg", "une adresse", regexAddress);
@@ -357,6 +351,8 @@ showErrorMsg(emailInput, "emailErrorMsg", "un email", regexMail);
 showErrorMsg(cityInput, "cityErrorMsg", "un nom de ville", regexString);
 
 
+
+/* ---------------- ENVOI DU FORMULAIRE ---------------- */
 
 let submitButton = document.getElementById("order");
 
@@ -400,10 +396,7 @@ submitButton.addEventListener("click", function (e) {
 
         fetch("http://localhost:3000/api/products/order", options)
             .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                console.log(data.orderId);
-
+            .then(data => {             
                 window.location.href = "confirmation.html?id=" + data.orderId;
                 localStorage.clear();
             })
