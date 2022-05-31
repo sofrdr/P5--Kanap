@@ -296,7 +296,7 @@ if (!myBasket) {
 
 // VALIDATION DU FORMULAIRE 
 
-let regexString = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
+let regexString = /^(?=.\D{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
 let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
 let regexAddress = /^(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})$/
 
