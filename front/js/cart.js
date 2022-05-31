@@ -179,11 +179,10 @@ async function getProductsAttributes() {
 
         /* Ajout d'un évènement pour supprimer un article*/
 
-        buttonDelete.addEventListener("click", function () {
+        buttonDelete.addEventListener("click", function (e) {
 
             const closestItem = buttonDelete.closest("article");
             const closestID = closestItem.getAttribute("data-id");
-            // console.log(closestID)
 
             // On supprime l'article du DOM
             document.getElementById("cart__items").removeChild(closestItem);
@@ -195,7 +194,6 @@ async function getProductsAttributes() {
                     return true;
                 }
             })
-            // console.log("closest id : " + index)
             myBasket.splice(index, 1)
             saveBasket(myBasket);
 
@@ -205,11 +203,12 @@ async function getProductsAttributes() {
                 alert("Votre panier est vide");
             }
 
+            // On actualise le nombre total de produit et le prix total
+            document.querySelector("#totalQuantity").textContent = getTotalProducts();
+            getTotalPrice();
+
         });
-
     }
-
-    //console.log(myBasket)
 }
 
 
@@ -242,11 +241,12 @@ function getTotalProducts() {
 
 /* Création d'une fonction getTotalPrice() pour calculer le prix total du panier */
 
-let totalPrice = 0;
-let price = [];
+
 async function getTotalPrice() {
     const response = await fetch("http://localhost:3000/api/products");
     const products = await response.json();
+    let totalPrice = 0;
+    let price = [];
     for (let item of myBasket) {
         for (let product of products) {
             if (product._id == item.id) {
@@ -265,12 +265,8 @@ async function getTotalPrice() {
         totalPrice += (price[i] * quantity[i]);
     }
 
-    let x = 0;
-    if (!myBasket) {
-        document.querySelector("#totalPrice").textContent = x;
-    } else {
-        document.querySelector("#totalPrice").textContent = totalPrice;
-    }
+    document.querySelector("#totalPrice").textContent = totalPrice;
+
 
 }
 
@@ -278,15 +274,17 @@ async function getTotalPrice() {
 //Appel des fonctions si le panier n'est pas vide
 
 if (!myBasket) {
+    document.querySelector("#totalPrice").textContent = "0";
+    document.querySelector("#totalQuantity").textContent = "0";
     alert("Votre panier est vide");
+
 } else {
     getProductsAttributes().catch(err => console.error(err));
     getTotalPrice().catch(err => console.error(err));;
     document.querySelector("#totalQuantity").textContent = getTotalProducts();
     document.addEventListener("change", function () {
         document.querySelector("#totalQuantity").textContent = getTotalProducts();
-
-
+        getTotalPrice();
     })
 
 }
@@ -366,14 +364,14 @@ submitButton.addEventListener("click", function (e) {
     /* Si tous les inputs sont valides ET que la quantité est inférieure à 100 article
     ALORS on envoie le formulaire
     SINON on bloque l'envoi du formulaire et on affiche un message d'erreur*/
-
+    e.preventDefault();
     let totalQuantity = getTotalProducts();
     if (!isFormValid()) {
-        e.preventDefault();
+
         alert("Veuillez vérifier les informations du formulaire");
     } else if (totalQuantity > 100 || totalQuantity < 1) {
-        e.preventDefault();
-        alert("Quantité maximale atteinte (100 produits max)")
+
+        alert("Quantité maximale atteinte (100 produits max)");
     } else {
 
         const contact = {
@@ -389,24 +387,25 @@ submitButton.addEventListener("click", function (e) {
             products.push(item.id);
         }
 
-        const orderInfo = {
-            contact: contact,
-            products: products
-        }
-        //console.log(products);
+        const orderInfo = { contact, products };
 
-        //console.log(contact);
         const options = {
             method: 'POST',
             body: JSON.stringify(orderInfo),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
         };
 
         fetch("http://localhost:3000/api/products/order", options)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 console.log(data.orderId);
+
                 window.location.href = "confirmation.html?id=" + data.orderId;
+                localStorage.clear();
             })
             .catch(err => console.error(err))
 
