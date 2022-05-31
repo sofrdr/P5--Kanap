@@ -217,7 +217,7 @@ async function getProductsAttributes() {
 /* Création d'une fonction getTotalProducts() pour obtenir le nombre total de produits
 ajoutés au panier */
 
-function getTotalproducts() {
+function getTotalProducts() {
     let totalQuantity = [];
     let sum = 0;
 
@@ -282,9 +282,9 @@ if (!myBasket) {
 } else {
     getProductsAttributes().catch(err => console.error(err));
     getTotalPrice().catch(err => console.error(err));;
-    document.querySelector("#totalQuantity").textContent = getTotalproducts();
+    document.querySelector("#totalQuantity").textContent = getTotalProducts();
     document.addEventListener("change", function () {
-        document.querySelector("#totalQuantity").textContent = getTotalproducts();
+        document.querySelector("#totalQuantity").textContent = getTotalProducts();
 
 
     })
@@ -298,7 +298,7 @@ if (!myBasket) {
 
 let regexString = /^(?=.{1,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-_.\s][\u00c0-\u01ffa-zA-Z]+)*$/
 let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
-let regexAddress = /(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})\s/
+let regexAddress = /^(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})$/
 
 
 /*Fonction pour vérifier la validité de la valeur de l'input avec 2 paramètres :
@@ -367,7 +367,7 @@ submitButton.addEventListener("click", function (e) {
     ALORS on envoie le formulaire
     SINON on bloque l'envoi du formulaire et on affiche un message d'erreur*/
 
-    let totalQuantity = getTotalproducts();
+    let totalQuantity = getTotalProducts();
     if (!isFormValid()) {
         e.preventDefault();
         alert("Veuillez vérifier les informations du formulaire");
@@ -392,14 +392,14 @@ submitButton.addEventListener("click", function (e) {
         const orderInfo = {
             contact: contact,
             products: products
-         }
+        }
         //console.log(products);
 
         //console.log(contact);
         const options = {
             method: 'POST',
             body: JSON.stringify(orderInfo),
-            headers: {'Content-Type': 'application/json'}                            
+            headers: { 'Content-Type': 'application/json' }
         };
 
         fetch("http://localhost:3000/api/products/order", options)

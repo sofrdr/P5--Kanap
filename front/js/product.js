@@ -54,21 +54,21 @@ getProductElt();
 
 
 // Function ajouter au panier
-function addtoBasket(shoppedProduct) {
+function addtoBasket(newProduct) {
   let basket = [];
   basket = localStorage.getItem("basket");
   basket = JSON.parse(basket);
 
   if (basket == null) {
-    let newBasket = [shoppedProduct];
+    let newBasket = [newProduct];
     localStorage.setItem("basket", JSON.stringify(newBasket));
     alert("Produit ajouté au panier 0");
   } else {
     let isDouble = false;
 
     for (const product of basket) {
-      if (product.key === shoppedProduct.key) {
-        const newQuantity = product.quantity + shoppedProduct.quantity;
+      if (product.key === newProduct.key) {
+        const newQuantity = product.quantity + newProduct.quantity;
         if (newQuantity <= 100 && newQuantity >= 1) {
           product.quantity = newQuantity;
           localStorage.setItem("basket", JSON.stringify(basket));
@@ -81,7 +81,7 @@ function addtoBasket(shoppedProduct) {
       }
     }
     if (isDouble === false) {
-      basket.push(shoppedProduct);
+      basket.push(newProduct);
       localStorage.setItem("basket", JSON.stringify(basket));
       console.log(basket);
       alert("Produit ajouté au panier 2");
@@ -91,7 +91,7 @@ function addtoBasket(shoppedProduct) {
 
 /* Fonction pour contrôler la quantité et le choix d'une couleur avant d'ajouter au panier */
 
-function controlInputs(quantitySelected, colorSelected, shoppedProduct) {
+function controlInputs(quantitySelected, colorSelected, newProduct) {
   //Si pas de couleur définie on empêche l'ajout du produit au panier
   if (colorSelected === "") {
     alert("Veuillez choisir une couleur");
@@ -100,7 +100,7 @@ function controlInputs(quantitySelected, colorSelected, shoppedProduct) {
     alert("Veuillez saisir une valeur entre 1 et 100");
     return false;
   } else {
-    addtoBasket(shoppedProduct);
+    addtoBasket(newProduct);
   }
 }
 
@@ -112,13 +112,13 @@ button.addEventListener("click", (e) => {
   let quantitySelected = document.getElementById("quantity").value;
   let colorSelected = document.getElementById("colors").value;
 
-  const shoppedProduct = {
+  const newProduct = {
     key: idProduct + "-" + colorSelected,
     id: idProduct,
     quantity: Number(quantitySelected),
     color: colorSelected,
   };
-  controlInputs(quantitySelected, colorSelected, shoppedProduct);
+  controlInputs(quantitySelected, colorSelected, newProduct);
 });
 
 
