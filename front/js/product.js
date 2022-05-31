@@ -50,36 +50,7 @@ function getProductElt() {
 
 getProductElt();
 
-/*Ajouter le produit au panier*/
-
-const button = document.getElementById("addToCart");
-
-button.addEventListener("click", (e) => {
-
-  let quantitySelected = document.getElementById("quantity").value;
-  let colorSelected = document.getElementById("colors").value;
-
-  const shoppedProduct = {
-    key: idProduct + "-" + colorSelected,
-    id: idProduct,
-    quantity: Number(quantitySelected),
-    color: colorSelected,
-  };
-  controlInputs(quantitySelected, colorSelected, shoppedProduct);
-});
-
-function controlInputs(quantitySelected, colorSelected, shoppedProduct) {
-  //Si pas de couleur définie on empêche l'ajout du produit au panier
-  if (colorSelected === "") {
-    alert("Veuillez choisir une couleur");
-    return false;
-  } else if (quantitySelected > 100 || quantitySelected < 1) {
-    alert("Veuillez saisir une valeur entre 1 et 100");
-    return false;
-  } else {
-    addtoBasket(shoppedProduct);
-  }
-}
+/* ---------------- Ajouter le produit au panier ------------------------*/
 
 
 // Function ajouter au panier
@@ -118,8 +89,37 @@ function addtoBasket(shoppedProduct) {
   }
 }
 
+/* Fonction pour contrôler la quantité et le choix d'une couleur avant d'ajouter au panier */
+
+function controlInputs(quantitySelected, colorSelected, shoppedProduct) {
+  //Si pas de couleur définie on empêche l'ajout du produit au panier
+  if (colorSelected === "") {
+    alert("Veuillez choisir une couleur");
+    return false;
+  } else if (quantitySelected > 100 || quantitySelected < 1) {
+    alert("Veuillez saisir une valeur entre 1 et 100");
+    return false;
+  } else {
+    addtoBasket(shoppedProduct);
+  }
+}
 
 
+const button = document.getElementById("addToCart");
+
+button.addEventListener("click", (e) => {
+
+  let quantitySelected = document.getElementById("quantity").value;
+  let colorSelected = document.getElementById("colors").value;
+
+  const shoppedProduct = {
+    key: idProduct + "-" + colorSelected,
+    id: idProduct,
+    quantity: Number(quantitySelected),
+    color: colorSelected,
+  };
+  controlInputs(quantitySelected, colorSelected, shoppedProduct);
+});
 
 
 

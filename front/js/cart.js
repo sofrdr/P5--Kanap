@@ -389,7 +389,10 @@ submitButton.addEventListener("click", function (e) {
             products.push(item.id);
         }
 
-        const orderInfo = {contact, products  }
+        const orderInfo = {
+            contact: contact,
+            products: products
+         }
         //console.log(products);
 
         //console.log(contact);
@@ -401,7 +404,10 @@ submitButton.addEventListener("click", function (e) {
 
         fetch("http://localhost:3000/api/products/order", options)
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                console.log(data.orderId);
+                window.location.href = "confirmation.html?id=" + data.orderId;
+            })
             .catch(err => console.error(err))
 
     }
