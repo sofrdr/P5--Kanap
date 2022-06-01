@@ -142,6 +142,7 @@ async function getProductsAttributes() {
 
         /* Ajout d'un évènement pour écouter le changement de valeur de l'input quantité, 
                 on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
+                
         quantityInput.addEventListener("change", function () {
             let newQuantity = Number(quantityInput.value);
             // console.log("nouvelle qté : " + newQuantity)
@@ -295,7 +296,7 @@ if (!myBasket) {
 
 let regexString = /^(?=.\D{0,}$)[\u00c0-\u01ffa-zA-Z]+(?:['-\s][\u00c0-\u01ffa-zA-Z]+)*$/
 let regexMail = /^((?!\.)[\w_.-]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
-let regexAddress = /^(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\s)\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)*,)*\d*(\s[a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ']*)+\s([\d]{5})$/
+let regexAddress = /^(([\u00c0-\u01ffa-zA-Z\d])+(?:['-\s][\u00c0-\u01ffa-zA-Z]+)*\s)+(\d{5})\s*$/
 
 
 /*Fonction pour vérifier la validité de la valeur de l'input avec 2 paramètres :

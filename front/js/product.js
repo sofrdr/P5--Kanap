@@ -65,7 +65,7 @@ function addtoBasket(newProduct) {
   if (basket == null) {
     let newBasket = [newProduct];
     localStorage.setItem("basket", JSON.stringify(newBasket));
-    alert("Produit ajouté au panier 0");
+    alert("Produit ajouté au panier");
   } else {
     let isDouble = false;
 
@@ -75,7 +75,7 @@ function addtoBasket(newProduct) {
         if (newQuantity <= 100 && newQuantity >= 1) {
           product.quantity = newQuantity;
           localStorage.setItem("basket", JSON.stringify(basket));
-          alert("Produit ajouté au panier 1");
+          alert("Produit ajouté au panier");
           return true;
         } else {
           alert("Quantité maximale atteinte");
@@ -87,7 +87,7 @@ function addtoBasket(newProduct) {
       basket.push(newProduct);
       localStorage.setItem("basket", JSON.stringify(basket));
       console.log(basket);
-      alert("Produit ajouté au panier 2");
+      alert("Produit ajouté au panier");
     }
   }
 }
@@ -108,9 +108,9 @@ function controlInputs(quantitySelected, colorSelected, newProduct) {
 }
 
 
-const button = document.getElementById("addToCart");
+const buttonAddToCart = document.getElementById("addToCart");
 
-button.addEventListener("click", (e) => {
+buttonAddToCart.addEventListener("click", (e) => {
 
   let quantitySelected = document.getElementById("quantity").value;
   let colorSelected = document.getElementById("colors").value;
