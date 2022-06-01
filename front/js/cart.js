@@ -140,26 +140,16 @@ async function getProductsAttributes() {
         quantityInput.setAttribute("value", item.quantity);
         quantityInput.classList.add("itemQuantity");
 
-
-        // Création du bouton supprimer pour chaque article
-        let buttonDelete = document.createElement("p");
-        buttonDelete.textContent = "Supprimer";
-        buttonDelete.classList.add("deleteItem");
-        let divDelete = document.createElement("div");
-        divDelete.classList.add("cart__item__content__settings__delete");
-        divDelete.appendChild(buttonDelete);
-        divSettings.appendChild(divDelete);
-
-
-
-
         /* Ajout d'un évènement pour écouter le changement de valeur de l'input quantité, 
-        on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
+                on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
         quantityInput.addEventListener("change", function () {
             let newQuantity = Number(quantityInput.value);
             // console.log("nouvelle qté : " + newQuantity)
             if (newQuantity >= 1 && newQuantity <= 100) {
                 item.quantity = newQuantity;
+            }else{
+                alert("Merci de saisir une quantité entre 1 et 100");
+                quantityInput.value = item.quantity;
             }
 
             let newBasket = [];
@@ -176,6 +166,18 @@ async function getProductsAttributes() {
 
 
         })
+
+
+        // Création du bouton supprimer pour chaque article
+        let buttonDelete = document.createElement("p");
+        buttonDelete.textContent = "Supprimer";
+        buttonDelete.classList.add("deleteItem");
+        let divDelete = document.createElement("div");
+        divDelete.classList.add("cart__item__content__settings__delete");
+        divDelete.appendChild(buttonDelete);
+        divSettings.appendChild(divDelete);
+
+
 
         /* Ajout d'un évènement pour supprimer un article*/
 
@@ -271,8 +273,8 @@ async function getTotalPrice() {
 //Appel des fonctions si le panier n'est pas vide
 
 if (!myBasket) {
-    document.querySelector("#totalPrice").textContent = "0";
-    document.querySelector("#totalQuantity").textContent = "0";
+    document.querySelector("#totalPrice").textContent = 0;
+    document.querySelector("#totalQuantity").textContent = 0;
     alert("Votre panier est vide");
 
 } else {
@@ -396,7 +398,7 @@ submitButton.addEventListener("click", function (e) {
 
         fetch("http://localhost:3000/api/products/order", options)
             .then(response => response.json())
-            .then(data => {             
+            .then(data => {
                 window.location.href = "confirmation.html?id=" + data.orderId;
                 localStorage.clear();
             })

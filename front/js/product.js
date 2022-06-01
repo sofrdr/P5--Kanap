@@ -29,6 +29,9 @@ function getProductElt() {
           //Ajout du nom du produit
           document.querySelector("#title").textContent = product.name;
 
+          //Ajout du nom du produit comme titre de la page
+          document.getElementsByTagName("TITLE")[0].textContent = product.name;
+
           //Ajout du prix du produit
           document.querySelector("#price").textContent = product.price;
 
