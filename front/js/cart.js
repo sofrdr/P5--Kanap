@@ -368,7 +368,7 @@ submitButton.addEventListener("click", function (e) {
     if (!isFormValid()) {
 
         alert("Veuillez vérifier les informations du formulaire");
-    } else if (totalQuantity > 100 || totalQuantity < 1) {
+    } else if (totalQuantity > 100) {
 
         alert("Quantité maximale atteinte (100 produits max)");
     } else {
@@ -378,7 +378,7 @@ submitButton.addEventListener("click", function (e) {
             lastName: lastNameInput.value,
             address: addressInput.value,
             city: cityInput.value,
-            email: emailInput.value
+            email: emailInput.value.toLowerCase()
         }
 
         let products = [];
@@ -387,6 +387,8 @@ submitButton.addEventListener("click", function (e) {
         }
 
         const orderInfo = { contact, products };
+
+        
 
         const options = {
             method: 'POST',
@@ -403,7 +405,7 @@ submitButton.addEventListener("click", function (e) {
                 window.location.href = "confirmation.html?id=" + data.orderId;
                 localStorage.clear();
             })
-            .catch(err => console.error(err))
+            .catch(err => console.error(err));
 
     }
 })
