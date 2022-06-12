@@ -185,7 +185,10 @@ async function editBasket() {
         buttonDelete.addEventListener("click", function (e) {
 
             const closestItem = buttonDelete.closest("article");
+            console.log(closestItem);
             const closestID = closestItem.getAttribute("data-id");
+            const closestColor = closestItem.getAttribute('data-color');
+            console.log(closestColor);
 
             // On supprime l'article du DOM
             document.getElementById("cart__items").removeChild(closestItem);
@@ -193,7 +196,7 @@ async function editBasket() {
 
             // On supprime l'article du panier + MAJ du local storage
             let index = myBasket.findIndex(element => {
-                if (element.id == closestID) {
+                if (element.id == closestID && element.color == closestColor) {
                     return true;
                 }
             })
