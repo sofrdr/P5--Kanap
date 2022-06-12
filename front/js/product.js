@@ -78,7 +78,7 @@ function addtoBasket(newProduct) {
           alert("Produit ajouté au panier");
           return true;
         } else {
-          alert("Quantité maximale atteinte");
+          alert("Quantité maximale atteinte (100 produits max)");
           return true;
         }
       }

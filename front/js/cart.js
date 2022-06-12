@@ -83,7 +83,7 @@ function addPrice(price, parent) {
 et les ajouter à la page panier */
 
 
-async function getProductsAttributes() {
+async function editBasket() {
     const response = await fetch("http://localhost:3000/api/products");
     const products = await response.json();
     //console.log(products);
@@ -142,13 +142,13 @@ async function getProductsAttributes() {
 
         /* Ajout d'un évènement pour écouter le changement de valeur de l'input quantité, 
                 on modifie la quantité du produit dans le panier et dans le local storage à chaque changement */
-                
+
         quantityInput.addEventListener("change", function () {
             let newQuantity = Number(quantityInput.value);
             // console.log("nouvelle qté : " + newQuantity)
             if (newQuantity >= 1 && newQuantity <= 100) {
                 item.quantity = newQuantity;
-            }else{
+            } else {
                 alert("Merci de saisir une quantité entre 1 et 100");
                 quantityInput.value = item.quantity;
             }
@@ -232,7 +232,6 @@ function getTotalProducts() {
         sum += totalQuantity[i];
     }
 
-    //document.querySelector("#totalQuantity").textContent = sum;
     return sum;
 
 }
@@ -242,31 +241,34 @@ function getTotalProducts() {
 /* Création d'une fonction getTotalPrice() pour calculer le prix total du panier */
 
 
-async function getTotalPrice() {
-    const response = await fetch("http://localhost:3000/api/products");
-    const products = await response.json();
-    let totalPrice = 0;
-    let price = [];
-    for (let item of myBasket) {
-        for (let product of products) {
-            if (product._id == item.id) {
-                price.push(product.price);
+function getTotalPrice() {
+    fetch("http://localhost:3000/api/products")
+        .then(response => response.json())
+        .then(products => {
+            let totalPrice = 0;
+            let price = [];
+            for (let item of myBasket) {
+                for (let product of products) {
+                    if (product._id == item.id) {
+                        price.push(product.price);
+                    }
+                }
             }
-        }
-    }
 
-    let quantity = [];
-    for (let item of myBasket) {
-        quantity.push(Number(item.quantity))
-    }
+            let quantity = [];
+            for (let item of myBasket) {
+                quantity.push(Number(item.quantity))
+            }
 
 
-    for (let i = 0; i < quantity.length; i++) {
-        totalPrice += (price[i] * quantity[i]);
-    }
+            for (let i = 0; i < quantity.length; i++) {
+                totalPrice += (price[i] * quantity[i]);
+            }
 
-    document.querySelector("#totalPrice").textContent = totalPrice;
+            document.querySelector("#totalPrice").textContent = totalPrice;
+        })
 
+        .catch(err => console.error(err))
 
 }
 
@@ -279,8 +281,8 @@ if (!myBasket) {
     alert("Votre panier est vide");
 
 } else {
-    getProductsAttributes().catch(err => console.error(err));
-    getTotalPrice().catch(err => console.error(err));;
+    editBasket().catch(err => console.error(err));
+    getTotalPrice();
     document.querySelector("#totalQuantity").textContent = getTotalProducts();
     document.addEventListener("change", function () {
         document.querySelector("#totalQuantity").textContent = getTotalProducts();
@@ -366,11 +368,9 @@ submitButton.addEventListener("click", function (e) {
     e.preventDefault();
     let totalQuantity = getTotalProducts();
     if (!isFormValid()) {
-
         alert("Veuillez vérifier les informations du formulaire");
-    } else if (totalQuantity > 100) {
-
-        alert("Quantité maximale atteinte (100 produits max)");
+    } else if (totalQuantity > 100 || totalQuantity < 1) {
+        alert("Veuillez sélectionner une quantité comprise entre 1 et 100");
     } else {
 
         const contact = {
@@ -388,7 +388,7 @@ submitButton.addEventListener("click", function (e) {
 
         const orderInfo = { contact, products };
 
-        
+
 
         const options = {
             method: 'POST',
