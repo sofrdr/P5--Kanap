@@ -1,8 +1,5 @@
-'use strict';
 const express = require('express');
 const path = require('path');
-const serverless = require('serverless-http');
-
 
 const productRoutes = require('./routes/product');
 
@@ -22,7 +19,5 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 app.use('/api/products', productRoutes);
-app.use('/.netlify/functions/server', productRoutes);
 
 module.exports = app;
-module.exports.handler = serverless(app)

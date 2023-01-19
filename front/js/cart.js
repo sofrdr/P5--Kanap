@@ -185,10 +185,10 @@ async function editBasket() {
         buttonDelete.addEventListener("click", function (e) {
 
             const closestItem = buttonDelete.closest("article");
-            //console.log(closestItem);
+            console.log(closestItem);
             const closestID = closestItem.getAttribute("data-id");
             const closestColor = closestItem.getAttribute('data-color');
-            //console.log(closestColor);
+            console.log(closestColor);
 
             // On supprime l'article du DOM
             document.getElementById("cart__items").removeChild(closestItem);
